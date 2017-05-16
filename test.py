@@ -1,3 +1,3 @@
-import numpy as  np
+import numpy as np
 
-print(np.exp(3))
+print(np.sum([1, 2, 3,4] * 2))

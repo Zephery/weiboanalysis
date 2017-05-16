@@ -171,3 +171,13 @@ def classify(pWordsPosicity, pWordsNegy, pWordsNeutral, DS, pPos, pNeg, pNeutral
         return pP, pN, pNeu, 2
     else:
         return pP, pN, pNeu, 3
+
+
+
+def classify_two(pWordsSpamicity, pWordsHealthy, DS, pSpam, testWordsMarkedArray):
+    ps = sum(testWordsMarkedArray * pWordsSpamicity * DS) + np.log(pSpam)
+    ph = sum(testWordsMarkedArray * pWordsHealthy) + np.log(1 - pSpam)
+    if ps > ph:
+        return ps, ph, 1
+    else:
+        return ps, ph, 0

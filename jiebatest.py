@@ -2,7 +2,7 @@
 import jieba
 import re
 jieba.load_userdict("train/word.txt")
-line='2 午睡还被说怎么还能够睡得心安理得。。。'
+line='能拿奖品这种事一定要和大家说一说的，否则以后还怎么在一起愉快的玩耍[酷]我正在领取#微博等级专享礼#，这里的奖品太给力了，快去试试人品吧'
 # s=line
 # p = re.compile(r'http?://.+$')  # 正则表达式，提取URL
 # result = p.findall(line)  # 找出所有url

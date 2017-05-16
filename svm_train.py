@@ -1,7 +1,7 @@
 import pynlpir
 import re
 from nltk.classify.scikitlearn import SklearnClassifier
-from sklearn.svm import SVC, LinearSVC
+from sklearn.svm import SVC, LinearSVC, libsvm,liblinear
 from sklearn.naive_bayes import MultinomialNB, BernoulliNB
 from sklearn.linear_model import LogisticRegression
 from random import shuffle
@@ -114,23 +114,29 @@ def score(classifier, train, test):
         if pred[i] == tag[i]:
             n = n + 1
     print('准确度为: %f' % (n / s))
-    return classifier
+    result=n/s
+    return classifier,result
 
 
 if __name__ == '__main__':
-    normalFeatures, advFeatures = build_features()  # 获得训练数据
-    shuffle(normalFeatures)  # 把文本的排列随机化
-    shuffle(advFeatures)  # 把文本的排列随机化
-    train = normalFeatures[80:] + advFeatures[80:]  # 训练集(后80条)
-    for_test = normalFeatures[:80] + advFeatures[:80]  # 预测集(验证集)(前面80条)
-    test, tag = zip(*for_test)  # 分离测试集合的数据和标签，便于验证和测试
-    # print('BernoulliNB`s accuracy is %f' % score(BernoulliNB()))
-    # print('MultinomiaNB`s accuracy is %f' % score(MultinomialNB()))
-    # print('LogisticRegression`s accuracy is  %f' % score(LogisticRegression()))
-    # print('SVC`s accuracy is %f' % score(SVC()))
-    classifier = score(LinearSVC(), train, test)
-    word_test = traintest(
-        '你以为只要走的很潇洒，就不会有[汽车]太多的痛苦，就不会有留恋，可是，为什么在喧闹的人群中会突然沉默下来，为什么听歌听到一半会突然哽咽不止。你不知道自己在期待什么，不知道自己在坚持什么，脑海里挥之不去的，都是过往的倒影。')  # 预测集(验证集)(20%)
-    result = classifier.classify_many(word_test)
-    print(result)
+    avg=0.0
+    for count in range(1,11):
+
+        normalFeatures, advFeatures = build_features()  # 获得训练数据
+        shuffle(normalFeatures)  # 把文本的排列随机化
+        shuffle(advFeatures)  # 把文本的排列随机化
+        train = normalFeatures[80:] + advFeatures[80:]  # 训练集(后80条)
+        for_test = normalFeatures[:80] + advFeatures[:80]  # 预测集(验证集)(前面80条)
+        test, tag = zip(*for_test)  # 分离测试集合的数据和标签，便于验证和测试
+        # print('BernoulliNB`s accuracy is %f' % score(BernoulliNB()))
+        # print('MultinomiaNB`s accuracy is %f' % score(MultinomialNB()))
+        # print('LogisticRegression`s accuracy is  %f' % score(LogisticRegression()))
+        # print('SVC`s accuracy is %f' % score(SVC()))
+        classifier,temp = score(LinearSVC(), train, test)
+        avg=temp+avg
+        # word_test = traintest(
+        #     '你以为只要走的很潇洒，就不会有[汽车]太多的痛苦，就不会有留恋，可是，为什么在喧闹的人群中会突然沉默下来，为什么听歌听到一半会突然哽咽不止。你不知道自己在期待什么，不知道自己在坚持什么，脑海里挥之不去的，都是过往的倒影。')  # 预测集(验证集)(20%)
+        # result = classifier.classify_many(word_test)
+        # print(result)
     # print('NuSVC`s accuracy is %f' % score(NuSVC()))
+    print("平均准确度为：",avg/10)
