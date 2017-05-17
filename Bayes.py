@@ -1,11 +1,10 @@
+import random
 import re
+import traceback
+
 import jieba
 import numpy as np
-import random
-import traceback
 from sklearn.externals import joblib
-from sklearn.externals import joblib
-
 from sklearn.naive_bayes import MultinomialNB
 
 jieba.load_userdict("train/word.txt")
