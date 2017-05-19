@@ -34,7 +34,7 @@ my_wordcloud = WordCloud(background_color='white',  # 设置背景颜色
                          max_font_size=50,  # 设置字体最大值
                          random_state=30,  # 设置有多少种随机生成状态，即有多少种配色方案
                          ).generate_from_frequencies(wl_space_split)
-# plt.figure(figsize=(100, 40))
+plt.figure(figsize=(100, 40))
 plt.imshow(my_wordcloud)
 plt.axis("off")
 plt.show()

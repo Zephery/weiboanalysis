@@ -108,6 +108,8 @@ def classify(pWordsPosicity, pWordsNegy, prior_Pos, test_word_arrayMarkedArray, 
         return pP, pN, 1
     else:
         return pP, pN, 2
+
+
 def classify_without_D(pWordsPosicity, pWordsNegy, prior_Pos, test_word_arrayMarkedArray, D, DS_temp):
     pP = sum(test_word_arrayMarkedArray * pWordsPosicity ) + np.log(prior_Pos)
     pN = sum(test_word_arrayMarkedArray * pWordsNegy ) + np.log(1 - prior_Pos)
