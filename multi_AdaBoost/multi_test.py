@@ -1,17 +1,15 @@
 import random
-import Bayes as bayes
-import numpy as np
+from itertools import cycle
+
 import matplotlib.pyplot as plt
+from pylab import mpl
+from sklearn.ensemble import AdaBoostClassifier
 from sklearn.metrics import roc_curve, auc
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import label_binarize
-from sklearn.multiclass import OneVsRestClassifier
-from scipy import interp
-from pylab import mpl
-from itertools import cycle
-from sklearn.metrics import zero_one_loss
 from sklearn.naive_bayes import MultinomialNB
-from sklearn.ensemble import AdaBoostClassifier
+from sklearn.preprocessing import label_binarize
+
+import Bayes as bayes
 
 if __name__ == '__main__':
     mpl.rcParams['font.sans-serif'] = ['SimHei']
