@@ -120,7 +120,7 @@ def score(classifier, train, test):
 
 if __name__ == '__main__':
     avg=0.0
-    for count in range(1,11):
+    for count in range(1,21):
 
         normalFeatures, advFeatures = build_features()  # 获得训练数据
         shuffle(normalFeatures)  # 把文本的排列随机化
@@ -139,4 +139,4 @@ if __name__ == '__main__':
         # result = classifier.classify_many(word_test)
         # print(result)
     # print('NuSVC`s accuracy is %f' % score(NuSVC()))
-    print("平均准确度为：",avg/10)
+    print("平均准确度为：",avg/20)

@@ -5,6 +5,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.externals import joblib
 import jieba
 import numpy as np
+from SVM import SVM
 
 jieba.load_userdict("../train/word.txt")
 stop = [line.strip() for line in open('../ad/stop.txt', 'r', encoding='utf-8').readlines()]  # 停用词
@@ -149,19 +150,34 @@ if __name__ == '__main__':
                 del (label[randomIndex])
             except Exception as e:
                 print(e)
-
-        multi = MultinomialNB()
-        multi = multi.fit(train_mood_array, label)
-        joblib.dump(multi, 'model/gnb.model')
-        muljob = joblib.load('model/gnb.model')
-        result = muljob.predict(test_word_array)
-        count = 0
-        for i in range(len(test_word_array)):
-            type = result[i]
-            if type != test_word_arrayLabel[i]:
-                count = count + 1
-        print("mul", count / float(testCount))
-        PosWords, NegWords, prior_Pos = trainingNaiveBayes(train_mood_array, label)
-        D = np.ones(len(vocabList))
-        DS_temp = D
-        predict(PosWords, NegWords, prior_Pos, test_word_array, D, DS_temp)
+        # 朴素贝叶斯
+        # multi = MultinomialNB()
+        # multi = multi.fit(train_mood_array, label)
+        # joblib.dump(multi, 'model/gnb.model')
+        # muljob = joblib.load('model/gnb.model')
+        # result = muljob.predict(test_word_array)
+        # count = 0
+        # for i in range(len(test_word_array)):
+        #     type = result[i]
+        #     if type != test_word_arrayLabel[i]:
+        #         count = count + 1
+        # print("mul", count / float(testCount))
+        # PosWords, NegWords, prior_Pos = trainingNaiveBayes(train_mood_array, label)
+        # D = np.ones(len(vocabList))
+        # DS_temp = D
+        # predict(PosWords, NegWords, prior_Pos, test_word_array, D, DS_temp)
+        # SVM
+        model = SVM(max_iter=10, kernel_type='linear', C=1.0, epsilon=0.001)
+        for i in range(len(label)):
+            if label[i]==2:
+                label[i]=-1
+        for i in range(len(test_word_arrayLabel)):
+            if test_word_arrayLabel[i]==2:
+                test_word_arrayLabel[i]=-1
+        model.fit(np.array(train_mood_array),np.array(label))
+        y_hat = model.predict(np.array(test_word_array))
+        num=0.0
+        for i in range(len(y_hat)):
+            if y_hat[i]!=test_word_arrayLabel[i]:
+                num=num+1
+        print(num/len(test_word_arrayLabel))
