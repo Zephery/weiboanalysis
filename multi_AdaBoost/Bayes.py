@@ -1,7 +1,16 @@
+'''
+多类的朴素贝叶斯实现
+'''
 import random
 import re
 import traceback
+from pylab import mpl
+from sklearn.metrics import zero_one_loss
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.ensemble import AdaBoostClassifier
+import matplotlib.pyplot as plt
 
+from pylab import mpl
 import jieba
 import numpy as np
 from sklearn.externals import joblib
@@ -133,11 +142,14 @@ def predict(test_word_array, test_word_arrayLabel, testCount, PosWords, NegWords
                 errorCount += 1
         except Exception as e:
             traceback.print_exc(e)
-    print(errorCount / testCount)
+    print("Bayes", errorCount / testCount)
+    return errorCount / testCount
 
 
 if __name__ == '__main__':
-    for m in range(1,11):
+    multi_nb = []
+    bayes_nb = []
+    for m in range(1, 51):
         vocabList = build_key_word("../train/train.txt")
         line_cut, label = loadDataSet("../train/train.txt")
         train_mood_array = setOfWordsListToVecTor(vocabList, line_cut)
@@ -154,20 +166,40 @@ if __name__ == '__main__':
             except Exception as e:
                 print(e)
 
-        multi=MultinomialNB()
-        multi=multi.fit(train_mood_array,label)
+        multi = MultinomialNB()
+        multi = multi.fit(train_mood_array, label)
         joblib.dump(multi, 'model/gnb.model')
-        muljob=joblib.load('model/gnb.model')
-        result=muljob.predict(test_word_array)
-        count=0
+        muljob = joblib.load('model/gnb.model')
+        result = muljob.predict(test_word_array)
+        count = 0
         for i in range(len(test_word_array)):
-            type=result[i]
-            if type!=test_word_arrayLabel[i]:
-                count=count+1
-            # print(test_word_array[i], "----", result[i])
-        print("mul",count/float(testCount))
+            type = result[i]
+            if type != test_word_arrayLabel[i]:
+                count = count + 1
+                # print(test_word_array[i], "----", result[i])
+        print("MultinomialNB", count / float(testCount))
+        multi_nb.append(count / float(testCount))
         PosWords, NegWords, NeutralWords, prior_Pos, prior_Neg, prior_Neutral = \
             trainingNaiveBayes(train_mood_array, label)
-        predict(test_word_array, test_word_arrayLabel, testCount, PosWords, NegWords, NeutralWords, prior_Pos, prior_Neg,
-                prior_Neutral)
+        accuracy = predict(test_word_array, test_word_arrayLabel, testCount, PosWords, NegWords, NeutralWords,
+                           prior_Pos, prior_Neg,
+                           prior_Neutral)
+        bayes_nb.append(accuracy)
 
+    # 画图
+    mpl.rcParams['font.sans-serif'] = ['SimHei']
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.plot([x for x in range(1, 51)], multi_nb,
+            label='sklearn库',
+            color='orange')
+    ax.plot([x for x in range(1, 51)], bayes_nb,
+            label='实现',
+            color='green')
+    ax.set_xlabel('次数')
+    ax.set_ylabel('准确率')
+    plt.xlim([1,50])
+    leg = ax.legend(loc='upper right', fancybox=True)
+    leg.get_frame().set_alpha(0.7)
+    plt.title("对比")
+    plt.show()

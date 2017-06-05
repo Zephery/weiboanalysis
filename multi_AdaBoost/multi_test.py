@@ -1,3 +1,6 @@
+'''
+使用机器学习库sklearn处理多分类问题
+'''
 import random
 from itertools import cycle
 
@@ -18,7 +21,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 
 from sklearn.preprocessing import label_binarize
-
 
 if __name__ == '__main__':
     mpl.rcParams['font.sans-serif'] = ['SimHei']
@@ -42,16 +44,16 @@ if __name__ == '__main__':
         except Exception as e:
             print(e)
     multi = MultinomialNB()
-    multi = multi.fit(train_mood_array, label)
+    # multi = multi.fit(train_mood_array, label)     # 去掉效果更佳，否则为AdaBoost训练前就进行了训练
     ada_real = AdaBoostClassifier(
         base_estimator=multi,
         learning_rate=learning_rate,
         n_estimators=n_estimators,
         algorithm="SAMME.R")
     ada_real.fit(train_mood_array, label)
-    ada_real_err = np.zeros((n_estimators,))
+    ada_real_err = np.zeros((n_estimators,))   #变成一个一维的矩阵，长度为n
     for i, y_pred in enumerate(ada_real.staged_predict(test_word_array)):  # 测试
-        ada_real_err[i] = zero_one_loss(y_pred, test_word_arrayLabel)
+        ada_real_err[i] = zero_one_loss(y_pred, test_word_arrayLabel) # 得出不同的，然后除于总数
 
     # ROC start
     # X_train, X_test, y_train, y_test = train_test_split(train_mood_array, label, test_size=.3,
