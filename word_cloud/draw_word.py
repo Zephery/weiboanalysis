@@ -27,7 +27,7 @@ def build_key_word(path):  # 通过词频产生特征
     return temp_list
 
 wl_space_split =build_key_word("../train/train.txt")
-# wl_space_split="你好 你好 我号 飞机 比尔 fejio berio"
+# wl_space_split="你好 你好 我号 比尔 fejio berio"
 my_wordcloud = WordCloud(background_color='white',  # 设置背景颜色
                          font_path='C:/Windows/fonts/simhei.ttf',  # 设置字体格式，如不设置显示不了中文
                          max_words=500,

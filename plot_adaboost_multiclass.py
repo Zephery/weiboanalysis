@@ -28,8 +28,6 @@ print(__doc__)
 # Author: Noel Dawe <noel.dawe@gmail.com>
 #
 # License: BSD 3 clause
-from sklearn.externals.six.moves import zip
-
 import matplotlib.pyplot as plt
 
 from sklearn.datasets import make_gaussian_quantiles
