@@ -1,7 +1,7 @@
 import pynlpir
 import re
 from nltk.classify.scikitlearn import SklearnClassifier
-from sklearn.svm import SVC, LinearSVC, libsvm,liblinear
+from sklearn.svm import SVC, LinearSVC, libsvm, liblinear
 from sklearn.naive_bayes import MultinomialNB, BernoulliNB
 from sklearn.linear_model import LogisticRegression
 from random import shuffle
@@ -65,6 +65,12 @@ def pynlpir_feature(number):  # 选取number个特征词
         word_scores[word] = normal_score + adv_score
     best_vals = sorted(word_scores.items(), key=lambda item: item[1], reverse=True)[
                 :number]  # 把词按信息量倒序排序。number是特征的维度，是可以不断调整直至最优的
+    # χ²=∑(Oi-Ei)/Ei~χ²(k-1)
+    # i=1~k
+    # Oi是观测值
+    # Ei是期望值
+    # 统计量大于临界值时,拒绝原假设
+
     best_words = set([w for w, s in best_vals])
     return dict([(word, True) for word in best_words])
 
@@ -114,14 +120,13 @@ def score(classifier, train, test):
         if pred[i] == tag[i]:
             n = n + 1
     print('准确度为: %f' % (n / s))
-    result=n/s
-    return classifier,result
+    result = n / s
+    return classifier, result
 
 
 if __name__ == '__main__':
-    avg=0.0
-    for count in range(1,21):
-
+    avg = 0.0
+    for count in range(1, 21):
         normalFeatures, advFeatures = build_features()  # 获得训练数据
         shuffle(normalFeatures)  # 把文本的排列随机化
         shuffle(advFeatures)  # 把文本的排列随机化
@@ -132,11 +137,11 @@ if __name__ == '__main__':
         # print('MultinomiaNB`s accuracy is %f' % score(MultinomialNB()))
         # print('LogisticRegression`s accuracy is  %f' % score(LogisticRegression()))
         # print('SVC`s accuracy is %f' % score(SVC()))
-        classifier,temp = score(LinearSVC(), train, test)
-        avg=temp+avg
+        classifier, temp = score(LinearSVC(), train, test)
+        avg = temp + avg
         # word_test = traintest(
         #     '你以为只要走的很潇洒，就不会有[汽车]太多的痛苦，就不会有留恋，可是，为什么在喧闹的人群中会突然沉默下来，为什么听歌听到一半会突然哽咽不止。你不知道自己在期待什么，不知道自己在坚持什么，脑海里挥之不去的，都是过往的倒影。')  # 预测集(验证集)(20%)
         # result = classifier.classify_many(word_test)
         # print(result)
     # print('NuSVC`s accuracy is %f' % score(NuSVC()))
-    print("平均准确度为：",avg/20)
+    print("平均准确度为：", avg / 20)
