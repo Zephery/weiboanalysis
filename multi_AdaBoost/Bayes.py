@@ -4,15 +4,11 @@
 import random
 import re
 import traceback
-from pylab import mpl
-from sklearn.metrics import zero_one_loss
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.ensemble import AdaBoostClassifier
-import matplotlib.pyplot as plt
 
-from pylab import mpl
 import jieba
+import matplotlib.pyplot as plt
 import numpy as np
+from pylab import mpl
 from sklearn.externals import joblib
 from sklearn.naive_bayes import MultinomialNB
 
@@ -25,8 +21,8 @@ def build_key_word(path):  # 通过词频产生特征
     with open(path, encoding="utf-8") as fp:
         for line in fp:
             for word in jieba.cut(line.strip()):
-                p = re.compile(r'\w', re.L)
-                result = p.sub("", word)
+                p = re.compile(b'\w', re.L)
+                result = p.sub(b"", bytes(word, encoding="utf-8")).decode("utf-8")
                 if not result or result == ' ':  # 空字符
                     continue
                 if len(word) > 1:  # 避免大量无意义的词语进入统计范围
@@ -49,8 +45,8 @@ def loadDataSet(path):  # 返回每条微博的分词与标签
                 word_list = []
                 sentence = str(sentence).replace('\u200b', '')
                 for word in jieba.cut(sentence.strip()):
-                    p = re.compile(r'\w', re.L)
-                    result = p.sub("", word)
+                    p = re.compile(b'\w', re.L)
+                    result = p.sub(b"", bytes(word, encoding="utf-8")).decode("utf-8")
                     if not result or result == ' ':  # 空字符
                         continue
                     word_list.append(word)
