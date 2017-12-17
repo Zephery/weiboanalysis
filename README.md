@@ -18,6 +18,7 @@
 四、 利用AdaBoost加强分类器
   
 **完整文档可以看doc**
+[https://github.com/Zephery/weiboanalysis/blob/master/doc](https://github.com/Zephery/weiboanalysis/blob/master/doc)
 
 ## 一、获取微博文本
 <div align="center">
